@@ -1,0 +1,157 @@
+
+[SOURCE 1]
+Path: knowledge_base\mitre\T1059_command_and_scripting_interpreter.md
+Score: 11
+
+Content:
+# T1059 - Command and Scripting Interpreter
+
+## Kısa Açıklama
+
+Command and Scripting Interpreter, saldırganların sistemde komut veya script çalıştırmak için işletim sistemindeki yorumlayıcıları kullanmasıdır.
+
+Windows tarafında PowerShell, cmd gibi araçlar; Linux tarafında shell veya bash gibi araçlar bu kategoriye örnek olabilir. Bu araçlar sistem yöneticileri tarafından normal amaçlarla da kullanılır, bu yüzden tek başına komut çalıştırılması kesin saldırı anlamına gelmez.
+
+## Bu Teknik Ne Zaman Düşünülür?
+
+Aşağıdaki durumlarda T1059 düşünülebilir:
+
+- PowerShell, cmd veya benzer komut araçları beklenmeyen şekilde çalıştırılmışsa
+- Encoded veya gizlenmiş komut kullanılmışsa
+- Komut normal kullanıcı hesabı tarafından çalıştırılmışsa
+- Komut beklenmeyen bir parent process tarafından başlatılmışsa
+- Komut çalıştıktan sonra ağ bağlantısı veya dosya indirme davranışı görülmüşse
+- Komut bir phishing maili, şüpheli ek dosya veya bilinmeyen process sonrası çalışmışsa
+- Aynı endpoint üzerinde başka güvenlik alertleri oluşmuşsa
+
+## Tipik Kanıtlar
+
+- command_line bilgisi
+- process_name
+- parent_process
+- encoded_command kullanımı
+- user bilgisi
+- endpoint_name
+- timestamp
+- network_connectio
+
+---
+
+[SOURCE 2]
+Path: knowledge_base\investigation_notes\endpoint_investigation_fields.md
+Score: 10
+
+Content:
+# Endpoint Investigation Fields
+
+## Amaç
+
+Bu dosya, endpoint yani kullanıcı cihazı veya sunucu üzerinde oluşan şüpheli olayları incelerken hangi alanlara bakılması gerektiğini açıklar.
+
+Suspicious PowerShell, malware activity, suspicious process veya command execution olaylarında bu alanlar SOC analyst için önemlidir.
+
+## Önemli Alanlar
+
+### user
+
+Komutu veya process’i çalıştıran kullanıcı hesabıdır.
+
+Kontrol soruları:
+- Kullanıcı normalde bu işlemi yapar mı?
+- Kullanıcı teknik veya admin yetkili biri mi?
+- Kullanıcı yakın zamanda phishing olayı yaşamış mı?
+
+### command_line
+
+Çalıştırılan komutun tam satır bilgisidir.
+
+Kontrol soruları:
+- Komut açık ve anlaşılır mı?
+- Komut gizlenmiş veya encoded görünüyor mu?
+- Komut dosya indirme, script çalıştırma veya dış bağlantı içeriyor mu?
+
+### parent_process
+
+Şüpheli process’i hangi process’in başlattığını gösterir.
+
+Kontrol soruları:
+- PowerShell normal terminalden mi başlatılmış?
+- Word, Excel, browser veya bilinmeyen process PowerShell başlatmış mı?
+- Parent process beklenen bir uygulama mı?
+
+### process_name
+
+Çalışan process’in adıdır.
+
+Kontrol soruları:
+- Process adı beklenen bir sistem aracı mı?
+- Process adı sahte veya yanıltıcı gör
+
+---
+
+[SOURCE 3]
+Path: knowledge_base\playbooks\suspicious_powershell_playbook.md
+Score: 10
+
+Content:
+# Suspicious PowerShell SOC Playbook
+
+## Amaç
+
+Bu playbook, Windows cihazlarda şüpheli PowerShell komutu çalıştığında SOC analyst’in hangi kontrolleri yapması gerektiğini açıklar.
+
+PowerShell tek başına zararlı değildir. Sistem yöneticileri ve teknik kullanıcılar PowerShell’i normal yönetim işleri için kullanabilir. Ancak saldırganlar da PowerShell’i komut çalıştırmak, bilgi toplamak, zararlı işlem başlatmak veya aktivitelerini gizlemek için kötüye kullanabilir.
+
+Bu yüzden PowerShell alerti görüldüğünde hemen kesin saldırı denmemeli; komutun içeriği, kullanıcı, parent process, cihaz geçmişi ve ağ bağlantıları birlikte incelenmelidir.
+
+## Bu Olay Ne Zaman Düşünülür?
+
+Aşağıdaki durumlar şüpheli PowerShell kullanımı oluşturabilir:
+
+- PowerShell normal kullanıcı hesabı tarafından çalıştırılmışsa
+- Encoded veya gizlenmiş komut kullanılmışsa
+- PowerShell beklenmeyen bir uygulama tarafından başlatılmışsa
+- Komut satırı çok uzun, karmaşık veya okunması zor görünüyorsa
+- PowerShell sonrasında dış ağ bağlantısı oluşmuşsa
+- Aynı cihazda başka güvenlik alertleri varsa
+- Kullanıcı normalde PowerShell kullanmıyorsa
+- PowerShell bir phishing maili veya şüpheli dosya açıldıktan sonra çalışmışsa
+
+#
+
+---
+
+[SOURCE 4]
+Path: knowledge_base\nist\nist_incident_response_summary.md
+Score: 9
+
+Content:
+# NIST Incident Response Summary
+
+## Amaç
+
+Bu dosya, siber güvenlik olaylarında savunmacı bakış açısıyla nasıl düşünülmesi gerektiğini özetler.
+
+MITRE ATT&CK dosyaları saldırgan davranışını anlamaya yardım eder. Playbook dosyaları belirli alert türlerinde hangi kontrollerin yapılacağını anlatır. NIST incident response özeti ise olay müdahalesinin genel mantığını verir.
+
+Bu dosya eğitim amaçlı sadeleştirilmiş bir özettir.
+
+## Incident Response Nedir?
+
+Incident response, bir güvenlik olayı fark edildiğinde olayın anlaşılması, kontrol altına alınması, temizlenmesi ve sonrasında ders çıkarılması sürecidir.
+
+Bir alert tek başına kesin incident anlamına gelmeyebilir. Önce olayın ne olduğu, hangi sistemleri etkilediği ve risk seviyesinin ne olduğu analiz edilmelidir.
+
+## Genel Olay Müdahale Mantığı
+
+Bir SOC analyst güvenlik alerti gördüğünde aşağıdaki sorularla düşünmelidir:
+
+1. Bu olay ne anlatıyor?
+2. Hangi kullanıcı, cihaz veya sistem etkilenmiş?
+3. Olayın kanıtları neler?
+4. Bu olay hangi saldırı davranışına benzeyebilir?
+5. Eksik bilgiler neler?
+6. Olayın riski düşük mü, orta mı, yüksek mi?
+7. İlk kontrol adımları neler olmalı?
+8. Kontrol altına alma veya müdahale gerekli mi?
+9. Olay

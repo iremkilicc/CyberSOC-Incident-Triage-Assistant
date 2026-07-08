@@ -1,0 +1,11 @@
+{
+  "alert_name": "Suspicious Email Reported",
+  "user": "ayse@example.local",
+  "sender": "security-update@example-alert.local",
+  "subject": "Urgent Password Reset Required",
+  "contains_link": true,
+  "unknown_domain": true,
+  "attachment": false,
+  "user_clicked": "unknown",
+  "credentials_entered": "unknown"
+}
