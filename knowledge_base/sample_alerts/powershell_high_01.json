@@ -1,0 +1,33 @@
+{
+  "alert_id": "PS-HIGH-001",
+  "category": "suspicious_powershell",
+  "risk_level": "high",
+  "title": "PowerShell launched after email attachment with suspicious network connection",
+  "description": "PowerShell was launched from an Office parent process after a user opened an email attachment. The process created a file and connected to an unusual external domain.",
+  "hostname": "WIN-FINANCE-03",
+  "user": "finance.user",
+  "user_type": "standard_user",
+  "process_name": "powershell.exe",
+  "command_line": "powershell.exe -EncodedCommand <encoded_content_redacted>",
+  "parent_process": "winword.exe",
+  "encoded_command_present": true,
+  "network_connection": true,
+  "destination_ip": "198.51.100.77",
+  "destination_domain": "update-example.net",
+  "url": "https://update-example.net/content",
+  "file_created": true,
+  "file_path": "C:\\Users\\finance.user\\AppData\\Local\\Temp\\update.tmp",
+  "registry_change": "unknown",
+  "scheduled_task_created": true,
+  "edr_alert": "high",
+  "related_phishing_alert": true,
+  "business_hours": true,
+  "notes": [
+    "Office parent process launched PowerShell",
+    "Encoded command present",
+    "External network connection observed",
+    "File created in Temp directory",
+    "Scheduled task created",
+    "Related phishing alert exists"
+  ]
+}

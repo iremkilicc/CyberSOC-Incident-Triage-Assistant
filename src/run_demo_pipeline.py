@@ -2,6 +2,7 @@ from pathlib import Path
 
 from build_context import retrieve, build_context
 from build_answer_prompt import build_answer_prompt
+from query_builder import build_query_from_alert
 
 
 ALERT_TEXT = """
@@ -13,29 +14,60 @@ Severity: medium
 """
 
 
-QUERY = "Multiple failed login attempts admin vpn successful login"
+def get_source_type(path):
+    """
+    Kaynak dosyanın hangi bilgi türüne ait olduğunu açıklar.
+    """
+
+    path_text = str(path).replace("\\", "/")
+
+    if "/mitre/" in path_text:
+        return "MITRE ATT&CK tekniği özeti"
+
+    if "/playbooks/" in path_text:
+        return "SOC playbook / kontrol adımları"
+
+    if "/investigation_notes/" in path_text:
+        return "Investigation notes / bakılacak alanlar"
+
+    if "/nist/" in path_text:
+        return "NIST incident response özeti"
+
+    return "Bilgi kaynağı"
 
 
 def main():
     print("CyberSOC Incident Triage Assistant - Demo Pipeline")
-    print("=" * 55)
+    print("=" * 60)
 
-    print("\n[1] Alert alındı:")
+    print("\n[1] Demo alert alındı:")
     print(ALERT_TEXT.strip())
 
-    print("\n[2] Knowledge base içinde ilgili kaynaklar aranıyor...")
-    results = retrieve(QUERY, top_k=4)
+    print("\n[2] Alert metninden arama sorgusu oluşturuluyor...")
+    query = build_query_from_alert(ALERT_TEXT)
+
+    print("\n[3] Knowledge base içinde ilgili kaynaklar aranıyor...")
+    results = retrieve(query, top_k=4)
 
     if not results:
         print("İlgili kaynak bulunamadı.")
         return
 
-    print("\n[3] Seçilen kaynaklar:")
+    print("\n[4] İlgili bilgi kaynakları bulundu:")
 
     for score, document in results:
-        print(f"- Skor {score} | {document['path']}")
+        path = document["path"]
+        source_type = get_source_type(path)
 
-    print("\n[4] Context oluşturuluyor...")
+        print(f"\n- {path.name}")
+        print(f"  Yol: {path}")
+        print(f"  Tür: {source_type}")
+        print(f"  Kaynak eşleşme skoru: {score}")
+
+    print("\nNot: Bu skor saldırı olasılığı değildir.")
+    print("Sadece alert metniyle kaynak dosya arasındaki kelime eşleşme skorudur.")
+
+    print("\n[5] Context oluşturuluyor...")
     context, sources = build_context(results)
 
     output_dir = Path("outputs")
@@ -46,7 +78,7 @@ def main():
 
     print(f"Context yazıldı: {retrieved_context_path}")
 
-    print("\n[5] Answer prompt oluşturuluyor...")
+    print("\n[6] Answer prompt oluşturuluyor...")
     answer_prompt = build_answer_prompt(ALERT_TEXT, context)
 
     answer_prompt_path = output_dir / "answer_prompt.txt"
@@ -54,7 +86,7 @@ def main():
 
     print(f"Answer prompt yazıldı: {answer_prompt_path}")
 
-    print("\n[6] Demo tamamlandı.")
+    print("\n[7] Demo tamamlandı.")
     print("Şu dosyaları kontrol edebilirsin:")
     print(f"- {retrieved_context_path}")
     print(f"- {answer_prompt_path}")

@@ -1,0 +1,33 @@
+Bu olay brute force veya suspicious login davranışı olabilir.
+
+Triage confidence: %55
+Risk seviyesi: UNKNOWN
+
+İlk yorum:
+Bu olayda temel soru şu: Aynı kullanıcıya veya aynı sisteme kısa sürede çok sayıda başarısız giriş denemesi var mı? Eğer başarısız denemelerden sonra başarılı bir giriş varsa risk belirgin şekilde artar.
+
+Önce şunlara bak:
+1. Kaç başarısız giriş denemesi var?
+2. Bu denemeler kaç dakika içinde olmuş?
+3. Denemeler aynı source IP’den mi geliyor?
+4. Hedef hesap normal kullanıcı mı, admin/yetkili hesap mı?
+5. Başarısız denemelerden sonra başarılı login var mı?
+6. MFA aktif mi ve MFA sonucu ne?
+7. Başarılı girişten sonra kullanıcı ne yapmış?
+8. Aynı IP başka hesapları da denemiş mi?
+
+Risk artar eğer:
+- Admin veya privileged account hedeflenmişse
+- VPN, SSH, RDP gibi dış erişim noktası hedeflenmişse
+- Çok sayıda başarısız deneme kısa sürede olmuşsa
+- Denemelerden sonra başarılı login oluşmuşsa
+- MFA yoksa veya MFA durumu bilinmiyorsa
+- Başarılı giriş sonrası anormal aktivite varsa
+
+False positive olabilir eğer:
+- Kullanıcı şifresini yanlış girip sonra doğru girmişse
+- Eski parola kullanan telefon/VPN client otomatik deniyorsa
+- Kurumsal servis veya script yanlış credential ile tekrar tekrar deniyorsa
+
+Sonraki adım:
+Bu olayı hemen “kesin saldırı” diye etiketleme. Önce login timeline, source IP geçmişi, MFA durumu ve successful login sonrası aktiviteleri kontrol et. Eğer başarılı giriş kullanıcı tarafından doğrulanmıyorsa incident seviyesine yükselt.

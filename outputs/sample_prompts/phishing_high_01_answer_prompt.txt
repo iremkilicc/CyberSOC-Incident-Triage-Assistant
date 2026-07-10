@@ -1,0 +1,475 @@
+You are a cybersecurity SOC analyst coach assistant.
+
+Your task is to help a junior SOC analyst understand and triage the given security alert.
+
+Use ONLY the provided knowledge base context.
+Do not invent facts that are not supported by the alert or the context.
+Do not claim that the event is definitely malicious unless the evidence clearly supports it.
+If there is not enough information, clearly say which evidence is missing.
+Do not recommend automatic blocking, account disabling, malware removal, or destructive actions.
+You are only giving triage guidance to a human analyst.
+
+Important:
+- Source scores in the context are retrieval matching scores, not attack probability.
+- Explain the event like you are coaching a beginner SOC analyst.
+- Prefer cautious language such as "benzeyebilir", "değerlendirilmeli", "kontrol edilmeli".
+- Mention multiple possible scenarios when appropriate.
+- Focus on what the analyst should check next.
+
+SECURITY ALERT:
+alert_id: PH-HIGH-001
+category: phishing
+risk_level: high
+title: Credential phishing with user click and suspicious login after submission
+description: A phishing email led the user to a fake login page. The user clicked the link and reported entering credentials. A suspicious successful login was observed shortly after.
+sender_email: admin@example-login.com
+sender_display_name: Microsoft Security
+reply_to: support@example-login.com
+recipient: finance.user@company.local
+subject: Security Alert: Verify Your Account
+delivery_status: delivered
+spf_result: fail
+dkim_result: fail
+dmarc_result: fail
+url_present: true
+url: https://example-login.com/verify
+visible_link_text: Verify Account
+landing_page_behavior: fake_login_page
+attachment_present: false
+user_clicked: true
+credentials_entered: true
+attachment_opened: false
+suspicious_login_after_click: true
+same_email_seen_in_other_mailboxes: true
+affected_mailboxes_count: 14
+notes: User clicked the phishing link | User reported entering credentials | Suspicious login observed after click | Multiple users received similar email | Email authentication failed
+
+KNOWLEDGE BASE CONTEXT:
+[SOURCE 1]
+Path: knowledge_base\investigation_notes\email_investigation_fields.md
+Score: 1364
+
+Content:
+# Email Investigation Fields
+
+## Amaç
+
+Bu dosya, phishing, suspicious email, credential theft, malicious link, malicious attachment ve business email compromise şüphesi olan e-posta olaylarında hangi alanlara bakılması gerektiğini açıklar.
+
+Bir phishing alerti tek başına kesin saldırı anlamına gelmez. SOC analyst önce e-postanın teknik göstergelerini, kullanıcı etkileşimini, link veya ek davranışını ve kurum içindeki yayılımı incelemelidir.
+
+Amaç, junior SOC analyst'in şu sorulara cevap bulmasını sağlamaktır:
+
+- E-posta gerçekten şüpheli mi?
+- Kullanıcı linke tıklamış mı?
+- Kullanıcı kimlik bilgisi girmiş mi?
+- Ekte zararlı dosya ihtimali var mı?
+- Aynı e-posta başka kullanıcılara da gitmiş mi?
+- Olay sadece spam mi, phishing mi, credential theft mi, yoksa daha ciddi incident mı?
+
+---
+
+## Temel Email Alanları
+
+### sender_email
+
+E-postayı gönderen görünen e-posta adresidir.
+
+Kontrol soruları:
+- Gönderen adres kurum içinden mi, dış kaynaktan mı?
+- Domain bilinen ve güvenilir bir domain mi?
+- Gönderen adres daha önce görülmüş mü?
+- Gönderen adres gerçek kuruma benziyor ama küçük fark içeriyor mu?
+- Adreste harf değişimi, fazla karakter veya sahte domain var mı?
+
+Risk artıran durumlar:
+- Bilinmeyen dış gönderen
+- Markaya benzeyen ama farklı domain
+- Yeni oluşturulmuş veya daha önce görülmemiş domain
+- Free mail servisinden gelen kurumsal görünümlü mesaj
+- Gönderen adresin reply-to adresiyle uyuşmaması
+
+---
+
+### sender_display_name
+
+E-postada görünen gönderen adıdır.
+
+Örnekler:
+- IT Support
+- Microsoft Security Team
+- Human Resources
+- Finance Department
+- CEO
+- Bank Notification
+
+Kontrol soruları:
+- Display name güvenilir bir kişi veya departman gibi mi görünüyor?
+- Display name ile gerçek e-posta adresi uyumlu mu?
+- Gönderen adı kurumdaki bir kişiyi taklit ediyor olabilir mi?
+- Üst yönetim, IT veya finans taklidi var mı?
+
+Risk artıran durumlar:
+- Display name güvenilir görünüyor ama e-posta domaini farklı
+- CEO, HR, IT, Security, Finance gibi güven uyandıran isimler kullanılması
+- Kullanıcının hızlı aksiyon almasını hedefleyen isimlendirme
+
+---
+
+### reply_to
+
+Kullanıcının cevap verdiğinde mesajın gideceği adrestir.
+
+Kontrol soruları:
+- Reply-to adresi sender_email ile aynı mı?
+- Reply-to farklı ve bilinmeyen bir domain mi?
+- Reply-to kişisel e-posta adresi mi?
+- Reply-to adresi dış kaynak mı?
+
+Risk artıran durumlar:
+- Sender güvenilir görünürken reply-to farklı domain olması
+- Reply-to adresinin ücretsiz mail servisinde olması
+- Reply-to adresinin şüpheli vey
+
+---
+
+[SOURCE 2]
+Path: knowledge_base\mitre\T1566_phishing.md
+Score: 1355
+
+Content:
+# T1566 - Phishing
+
+## Kısa Açıklama
+
+T1566 - Phishing, saldırganın kullanıcıyı kandırarak zararlı linke tıklatmaya, zararlı dosya açtırmaya veya kimlik bilgisi girdirmeye çalıştığı sosyal mühendislik tekniğidir.
+
+Phishing saldırıları genellikle e-posta üzerinden görülür, ancak mesajlaşma uygulamaları, SMS, sosyal medya veya sahte bildirimler üzerinden de gerçekleşebilir.
+
+SOC açısından phishing alerti tek başına kesin başarılı saldırı anlamına gelmez. Önemli olan şudur:
+
+- E-posta kullanıcıya ulaştı mı?
+- Kullanıcı linke tıkladı mı?
+- Kullanıcı credential girdi mi?
+- Kullanıcı attachment açtı mı?
+- Tıklama veya dosya açma sonrası başka şüpheli aktivite oluştu mu?
+- Aynı phishing mesajı başka kullanıcılara da gönderildi mi?
+
+---
+
+## SOC Açısından Neden Önemlidir?
+
+Phishing, birçok siber saldırının başlangıç noktası olabilir.
+
+Başarılı bir phishing olayı şu risklere yol açabilir:
+
+- Kullanıcı hesabının ele geçirilmesi
+- Parola veya MFA bilgisinin çalınması
+- Zararlı dosya çalıştırılması
+- Endpoint üzerinde suspicious process oluşması
+- Mailbox rule veya forwarding rule eklenmesi
+- Kurum içi başka kullanıcılara yayılım
+- Finansal dolandırıcılık
+- Veri sızıntısı
+- VPN, cloud veya email hesabına yetkisiz erişim
+
+SOC analyst için amaç, sadece mailin şüpheli olup olmadığını anlamak değildir. Asıl amaç şunu belirlemektir:
+
+- Kullanıcı etkilendi mi?
+- Hesap veya cihaz ele geçirilmiş olabilir mi?
+- Olay tek kullanıcıyla mı sınırlı, yoksa kampanya mı?
+- Hangi kanıtlar incident seviyesine yükseltmeyi destekliyor?
+
+---
+
+## Bu Teknik Ne Zaman Düşünülür?
+
+Aşağıdaki durumlarda T1566 Phishing düşünülebilir:
+
+- Kullanıcı şüpheli e-posta raporladıysa
+- Mail acil aksiyon istiyorsa
+- Mail şifre sıfırlama, hesap doğrulama veya güvenlik uyarısı teması içeriyorsa
+- Mail bilinmeyen link içeriyorsa
+- Mail kullanıcıdan parola, MFA kodu veya kişisel bilgi istiyorsa
+- Gönderen adres güvenilir bir kurum gibi görünüp domain farklıysa
+- Display name ile sender email uyumsuzsa
+- Reply-to adresi farklı veya şüpheliyse
+- SPF, DKIM veya DMARC sonuçları başarısızsa
+- Ekte riskli dosya varsa
+- Link sahte login sayfasına gidiyorsa
+- Mail çok sayıda kullanıcıya gönderildiyse
+- Kullanıcı tıkladıktan sonra suspicious login oluştuysa
+- Attachment açıldıktan sonra endpoint alerti oluştuysa
+
+---
+
+## İlgili Alt Davranışlar
+
+### Credential Phishing
+
+Credential phishing, kullanıcının parola, MFA kodu veya oturum bilgisini çalmayı hedefler.
+
+Tipik ipuçları:
+
+- Password reset teması
+- Account verificatio
+
+---
+
+[SOURCE 3]
+Path: knowledge_base\playbooks\phishing_playbook.md
+Score: 1355
+
+Content:
+# Phishing SOC Playbook
+
+## Amaç
+
+Bu playbook, phishing, suspicious email, malicious link, malicious attachment, credential theft ve business email compromise şüphesi olan e-posta olaylarında SOC analyst'in nasıl düşünmesi gerektiğini açıklar.
+
+Phishing alerti tek başına kesin saldırı anlamına gelmez. Bazı e-postalar spam, meşru bildirim, yanlış yapılandırılmış kurumsal servis veya kullanıcı tarafından yanlış anlaşılmış mesaj olabilir.
+
+Amaç, e-postayı kanıta dayalı şekilde incelemek, kullanıcının etkilenip etkilenmediğini anlamak ve olayın spam mi, phishing mi, credential theft mı, yoksa incident mı olduğunu belirlemektir.
+
+---
+
+## Kapsam
+
+Bu playbook şu olaylarda kullanılabilir:
+
+- Kullanıcının şüpheli e-posta raporlaması
+- Şifre sıfırlama veya hesap doğrulama temalı e-postalar
+- Bilinmeyen link içeren e-postalar
+- Bilinmeyen veya riskli attachment içeren e-postalar
+- Kullanıcıdan parola, MFA kodu veya kişisel bilgi isteyen mesajlar
+- Sahte Microsoft, Google, banka, kargo, fatura veya kurum içi servis taklidi
+- Mail gateway tarafından suspicious veya malicious olarak işaretlenen e-postalar
+- Aynı e-postanın birden fazla kullanıcıya gönderilmesi
+- Linke tıklama sonrası suspicious login
+- Attachment açılması sonrası endpoint alerti
+
+---
+
+## Temel Kavramlar
+
+### Phishing
+
+Phishing, saldırganın kullanıcıyı kandırarak linke tıklatmaya, dosya açtırmaya veya kimlik bilgisi girdirmeye çalışmasıdır.
+
+Tipik özellikler:
+
+- Aciliyet hissi
+- Güvenilir kurum veya kişi taklidi
+- Linke tıklama isteği
+- Parola veya MFA kodu isteme
+- Beklenmeyen dosya eki
+- Sahte login sayfası
+
+---
+
+### Credential Phishing
+
+Credential phishing, kullanıcının kimlik bilgilerini çalmayı hedefleyen phishing türüdür.
+
+Tipik özellikler:
+
+- Password reset
+- Account verification
+- Login required
+- MFA verification
+- Session expired
+- Hesabınız askıya alınacak
+- Parolanızı doğrulayın
+
+En kritik soru:
+
+- Kullanıcı linke tıkladı mı ve credential girdi mi?
+
+---
+
+### Malicious Attachment
+
+E-postadaki ek dosyanın zararlı davranış üretme ihtimalidir.
+
+Riskli durumlar:
+
+- Makro içeren Office dosyası
+- Script dosyası
+- Arşiv içinde çalıştırılabilir dosya
+- LNK, ISO, IMG, HTA, JS, VBS, PS1 gibi uzantılar
+- Attachment açıldıktan sonra PowerShell, cmd veya wscript çalışması
+
+---
+
+### Business Email Compromise
+
+Business Email Compromise, saldırganın güvenilir kişi veya kurum taklidiyle para transferi, fatura değişikliği veya hassas bilgi istemesidir.
+
+Tipik özellikler:
+
+- CEO, yönetici, finans veya tedarikçi 
+
+---
+
+[SOURCE 4]
+Path: knowledge_base\nist\nist_incident_response_summary.md
+Score: 904
+
+Content:
+# NIST Incident Response Summary
+
+## Amaç
+
+Bu dosya, siber güvenlik olaylarında savunmacı bakış açısıyla nasıl düşünülmesi gerektiğini özetler.
+
+MITRE ATT&CK dosyaları saldırgan davranışını anlamaya yardım eder. Playbook dosyaları belirli alert türlerinde hangi kontrollerin yapılacağını anlatır. NIST incident response özeti ise olay müdahalesinin genel mantığını verir.
+
+Bu dosya eğitim amaçlı sadeleştirilmiş bir özettir.
+
+## Incident Response Nedir?
+
+Incident response, bir güvenlik olayı fark edildiğinde olayın anlaşılması, kontrol altına alınması, temizlenmesi ve sonrasında ders çıkarılması sürecidir.
+
+Bir alert tek başına kesin incident anlamına gelmeyebilir. Önce olayın ne olduğu, hangi sistemleri etkilediği ve risk seviyesinin ne olduğu analiz edilmelidir.
+
+## Genel Olay Müdahale Mantığı
+
+Bir SOC analyst güvenlik alerti gördüğünde aşağıdaki sorularla düşünmelidir:
+
+1. Bu olay ne anlatıyor?
+2. Hangi kullanıcı, cihaz veya sistem etkilenmiş?
+3. Olayın kanıtları neler?
+4. Bu olay hangi saldırı davranışına benzeyebilir?
+5. Eksik bilgiler neler?
+6. Olayın riski düşük mü, orta mı, yüksek mi?
+7. İlk kontrol adımları neler olmalı?
+8. Kontrol altına alma veya müdahale gerekli mi?
+9. Olay sonrasında hangi dersler çıkarılabilir?
+
+## 1. Olayı Tanımla
+
+İlk adım, alertin ne anlattığını sade şekilde anlamaktır.
+
+Örnekler:
+
+- Çok sayıda başarısız login denemesi görüldü.
+- Kullanıcı şüpheli bir e-posta bildirdi.
+- Endpoint üzerinde encoded PowerShell komutu çalıştı.
+
+Bu aşamada amaç hemen karar vermek değildir. Amaç olayın neye benzediğini anlamaktır.
+
+## 2. Etkilenen Kullanıcı ve Sistemleri Belirle
+
+Olay hangi kullanıcıyı, cihazı veya sistemi etkiliyor?
+
+Bakılabilecek alanlar:
+
+- user
+- source_ip
+- endpoint_name
+- target_system
+- recipient
+- sender
+- timestamp
+- affected_host
+
+Örnek:
+
+Brute force olayında hedef kullanıcı `admin` ise risk artabilir.
+
+Phishing olayında kullanıcı linke tıkladıysa risk artabilir.
+
+PowerShell olayında endpoint kritik bir sunucuysa risk artabilir.
+
+## 3. Kanıtları Topla ve Koru
+
+Karar vermeden önce kanıtlar toplanmalıdır.
+
+Kanıt örnekleri:
+
+- login logs
+- email headers
+- command_line bilgisi
+- parent_process bilgisi
+- network connection bilgisi
+- related_alerts
+- kullanıcı beyanı
+- güvenlik aracı uyarıları
+
+Kanıtlar eksikse asistan kesin konuşmamalıdır.
+
+Doğru ifade:
+
+"Kaynaklarda bu olayı kesin saldırı olarak değerlendirmek için yeterli bilgi yok."
+
+Yanlış ifade:
+
+"Bu kesin saldırıdır."
+
+## 4. Olayın Ciddiyetini Değerlendir
+
+Olayın risk sev
+
+
+Now produce the answer in Turkish using this exact SOC Analyst Coach format:
+
+# 1. Olayı İnsan Dilinde Açıklama
+
+Bu alertin ne anlattığını teknik olmayan, sade bir dille açıkla.
+
+# 2. İlk İzlenim
+
+Bu olay ilk bakışta neye benziyor? Kesin konuşmadan yorumla.
+
+# 3. Olası Senaryolar
+
+Bu olayın birkaç farklı açıklamasını yaz.
+
+Örnek yaklaşım:
+- Saldırı ihtimali
+- Geçerli hesap kullanımı ihtimali
+- Kullanıcı hatası / yanlış yapılandırma / false positive ihtimali
+
+# 4. MITRE ATT&CK Eşleşmesi
+
+İlgili MITRE tekniğini veya tekniklerini yaz.
+Emin değilsen "olası eşleşme" olarak belirt.
+
+# 5. Bu Yorumu Destekleyen Kanıtlar
+
+Alert içindeki somut kanıtları madde madde yaz.
+
+# 6. Risk Artıran Durumlar
+
+Bu olayda riski artıran noktaları yaz.
+
+# 7. Risk Düşüren veya False Positive Olabilecek Durumlar
+
+Bu olayın saldırı dışı nedenlerini açıkla.
+
+# 8. Eksik Bilgiler
+
+Kesin karar vermek için hangi bilgiler eksik, madde madde yaz.
+
+# 9. SOC Analyst İçin Adım Adım Kontrol Planı
+
+Junior SOC analyst'in sırayla neye bakması gerektiğini adım adım yaz.
+Adımlar pratik ve uygulanabilir olsun.
+
+# 10. Ne Zaman Incident'a Yükseltilir?
+
+Bu olay hangi şartlarda gerçek incident olarak yükseltilmeli, açıkla.
+
+# 11. Önerilen İlk Müdahale
+
+Temkinli ve güvenli öneriler ver.
+Otomatik engelleme, hesap kapatma veya silme gibi aksiyonlar önerme.
+
+# 12. Kullanılan Kaynaklar
+
+Context içinde verilen kaynak dosya adlarını yaz.
+
+# 13. Güven Düzeyi
+
+Düşük, orta veya yüksek şeklinde belirt.
+Nedenini kısa ve kanıta dayalı açıkla.

@@ -1,0 +1,29 @@
+{
+  "alert_id": "PS-MED-001",
+  "category": "suspicious_powershell",
+  "risk_level": "medium",
+  "title": "Encoded PowerShell command by standard user",
+  "description": "A standard user executed an encoded PowerShell command. Parent process and network connection status are unknown.",
+  "hostname": "WIN-CLIENT-01",
+  "user": "employee04",
+  "user_type": "standard_user",
+  "process_name": "powershell.exe",
+  "command_line": "powershell.exe -EncodedCommand <encoded_content_redacted>",
+  "parent_process": "unknown",
+  "encoded_command_present": true,
+  "network_connection": "unknown",
+  "destination_ip": "unknown",
+  "destination_domain": "unknown",
+  "file_created": "unknown",
+  "registry_change": "unknown",
+  "scheduled_task_created": "unknown",
+  "edr_alert": "medium",
+  "business_hours": true,
+  "notes": [
+    "Encoded PowerShell command",
+    "Standard user context",
+    "Parent process unknown",
+    "Network connection status unknown",
+    "More evidence required"
+  ]
+}

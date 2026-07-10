@@ -1,69 +1,233 @@
 # CyberSOC Incident Triage Assistant
 
-CyberSOC Incident Triage Assistant is an offline RAG-based cybersecurity assistant designed to support SOC analysts during initial alert triage.
+CyberSOC Incident Triage Assistant is an offline, knowledge-base driven SOC triage assistant prototype.
 
-The project takes a security alert, log snippet, or incident description, retrieves relevant knowledge base documents, and prepares a structured SOC triage answer prompt.
+The project helps a junior SOC analyst understand and triage common security alerts using a local cybersecurity knowledge base.
 
-This project is built for educational and portfolio purposes.
+Current supported alert categories:
+
+- Brute Force / Suspicious Login
+- Phishing / Suspicious Email
+- Suspicious PowerShell / Endpoint Execution
+
+This project is designed for defensive cybersecurity learning, SOC workflow practice, and portfolio demonstration.
 
 ---
 
 ## Project Goal
 
+The goal of this project is not to automatically block IP addresses, disable accounts, remove malware, or perform destructive actions.
+
 The goal is to help a human SOC analyst answer questions such as:
 
-- What could this alert mean?
-- Which MITRE ATT&CK technique could be related?
-- What evidence supports this interpretation?
+- What does this alert mean?
+- Which attack behavior could it resemble?
+- What evidence supports the interpretation?
 - What information is missing?
-- What should be checked first?
-- Could this be a false positive?
+- What should the analyst check next?
+- When should the alert be escalated as an incident?
 
-The assistant does not automatically block IP addresses, disable accounts, remove files, or perform remediation actions.
-
----
-
-## Current Demo Scenario
-
-The current working demo focuses on a brute force login alert.
-
-Example alert:
-
-```text
-Multiple failed login attempts were detected for the admin user on the vpn-gateway.
-There were 35 failed login attempts within 5 minutes.
-After the failed attempts, a successful login was observed.
-Source IP: 192.168.1.25
-Severity: medium
-```
-
-The system retrieves relevant knowledge base documents and builds a SOC analyst answer prompt.
-
-Expected retrieved sources:
-
-```text
-knowledge_base/investigation_notes/login_log_fields.md
-knowledge_base/mitre/T1110_brute_force.md
-knowledge_base/playbooks/brute_force_playbook.md
-knowledge_base/nist/nist_incident_response_summary.md
-```
+The assistant uses a local knowledge base and generates a structured SOC Analyst Coach style prompt for further analysis by an LLM.
 
 ---
 
-## Supported Demo Scenarios
+## Current Features
 
-The first version supports three main cybersecurity triage scenarios:
+- Sample final SOC Analyst Coach answers
+- Local Markdown-based cybersecurity knowledge base
+- Simple retrieval system
+- Category-aware retrieval scoring
+- SOC Analyst Coach prompt generation
+- Interactive CLI triage mode
+- Demo pipeline
+- 9 structured sample alerts
+- Retrieval test suite
+- Sample alert retrieval test suite
+- Automatic prompt generation for all sample alerts
 
-1. Brute Force
-2. Phishing
-3. Suspicious PowerShell
+---
 
-Each scenario contains:
+## Supported Scenarios
 
-- MITRE ATT&CK summary
-- SOC playbook
-- Investigation field notes
-- Sample alert data
+### 1. Brute Force / Suspicious Login
+
+Covers alerts such as:
+
+- Multiple failed login attempts
+- VPN login anomalies
+- Failed attempts followed by successful login
+- Privileged account targeting
+- Password guessing
+- Password spraying
+- Credential stuffing suspicion
+
+Main knowledge base files:
+
+- `knowledge_base/mitre/T1110_brute_force.md`
+- `knowledge_base/playbooks/brute_force_playbook.md`
+- `knowledge_base/investigation_notes/login_log_fields.md`
+
+---
+
+### 2. Phishing / Suspicious Email
+
+Covers alerts such as:
+
+- Suspicious email reports
+- Unknown links
+- Password reset themes
+- Credential phishing
+- Malicious attachment suspicion
+- User click tracking
+- Credential entry suspicion
+- Email authentication issues
+
+Main knowledge base files:
+
+- `knowledge_base/mitre/T1566_phishing.md`
+- `knowledge_base/playbooks/phishing_playbook.md`
+- `knowledge_base/investigation_notes/email_investigation_fields.md`
+
+---
+
+### 3. Suspicious PowerShell / Endpoint Execution
+
+Covers alerts such as:
+
+- Encoded PowerShell commands
+- Suspicious command-line execution
+- Unknown parent process
+- PowerShell network connections
+- Office document launching PowerShell
+- Script execution after phishing
+- EDR or AMSI detection context
+
+Main knowledge base files:
+
+- `knowledge_base/mitre/T1059_command_and_scripting_interpreter.md`
+- `knowledge_base/playbooks/suspicious_powershell_playbook.md`
+- `knowledge_base/investigation_notes/endpoint_investigation_fields.md`
+
+---
+
+## Knowledge Base Structure
+
+```text
+knowledge_base/
+├── mitre/
+│   ├── T1110_brute_force.md
+│   ├── T1566_phishing.md
+│   └── T1059_command_and_scripting_interpreter.md
+├── nist/
+│   └── nist_incident_response_summary.md
+├── playbooks/
+│   ├── brute_force_playbook.md
+│   ├── phishing_playbook.md
+│   └── suspicious_powershell_playbook.md
+├── investigation_notes/
+│   ├── login_log_fields.md
+│   ├── email_investigation_fields.md
+│   └── endpoint_investigation_fields.md
+└── sample_alerts/
+    ├── brute_force_low_01.json
+    ├── brute_force_medium_01.json
+    ├── brute_force_high_01.json
+    ├── phishing_low_01.json
+    ├── phishing_medium_01.json
+    ├── phishing_high_01.json
+    ├── powershell_low_01.json
+    ├── powershell_medium_01.json
+    └── powershell_high_01.json
+```
+
+---
+
+## Sample Alerts
+
+The project includes 9 sample alerts grouped by category and risk level.
+
+```text
+Brute Force:
+- brute_force_low_01.json
+- brute_force_medium_01.json
+- brute_force_high_01.json
+
+Phishing:
+- phishing_low_01.json
+- phishing_medium_01.json
+- phishing_high_01.json
+
+Suspicious PowerShell:
+- powershell_low_01.json
+- powershell_medium_01.json
+- powershell_high_01.json
+```
+
+These alerts are used to test whether the retrieval system connects each alert to the correct knowledge base sources.
+
+---
+
+## How Retrieval Works
+
+The retrieval system reads the Markdown files inside the knowledge base and compares them with the alert text.
+
+The system uses:
+
+- keyword matching
+- token aliases
+- category detection
+- category-aware scoring
+- general NIST incident response boosting
+
+The retrieval score is not an attack probability.
+
+It only means:
+
+```text
+How strongly the alert text matched a knowledge base source.
+```
+
+For example:
+
+- A brute force alert should retrieve T1110, brute force playbook, login log fields, and NIST.
+- A phishing alert should retrieve T1566, phishing playbook, email investigation fields, and NIST.
+- A PowerShell alert should retrieve T1059, suspicious PowerShell playbook, endpoint investigation fields, and NIST.
+
+---
+
+## SOC Analyst Coach Output Format
+
+The final prompt asks the LLM to answer in this format:
+
+```text
+# 1. Olayı İnsan Dilinde Açıklama
+
+# 2. İlk İzlenim
+
+# 3. Olası Senaryolar
+
+# 4. MITRE ATT&CK Eşleşmesi
+
+# 5. Bu Yorumu Destekleyen Kanıtlar
+
+# 6. Risk Artıran Durumlar
+
+# 7. Risk Düşüren veya False Positive Olabilecek Durumlar
+
+# 8. Eksik Bilgiler
+
+# 9. SOC Analyst İçin Adım Adım Kontrol Planı
+
+# 10. Ne Zaman Incident'a Yükseltilir?
+
+# 11. Önerilen İlk Müdahale
+
+# 12. Kullanılan Kaynaklar
+
+# 13. Güven Düzeyi
+```
+
+This format is designed to coach a junior SOC analyst instead of giving a short generic answer.
 
 ---
 
@@ -71,255 +235,216 @@ Each scenario contains:
 
 ```text
 CyberSOC-Incident-Triage-Assistant/
-│
 ├── docs/
 │   └── planning/
-│       ├── part1_project_notes.md
-│       └── part2_knowledge_base_plan.md
-│
 ├── knowledge_base/
 │   ├── mitre/
-│   │   ├── T1110_brute_force.md
-│   │   ├── T1566_phishing.md
-│   │   └── T1059_command_and_scripting_interpreter.md
-│   │
 │   ├── nist/
-│   │   └── nist_incident_response_summary.md
-│   │
 │   ├── playbooks/
-│   │   ├── brute_force_playbook.md
-│   │   ├── phishing_playbook.md
-│   │   └── suspicious_powershell_playbook.md
-│   │
 │   ├── investigation_notes/
-│   │   ├── login_log_fields.md
-│   │   ├── email_investigation_fields.md
-│   │   └── endpoint_investigation_fields.md
-│   │
 │   └── sample_alerts/
-│       ├── brute_force_alert_01.json
-│       ├── phishing_alert_01.json
-│       └── powershell_alert_01.json
-│
 ├── outputs/
+│   ├── sample_prompts/
 │   ├── retrieved_context.txt
 │   ├── answer_prompt.txt
-│   └── sample_answer_bruteforce.md
-│
+│   ├── sample_answer_bruteforce.md
+│   ├── sample_answer_phishing.md
+│   └── sample_answer_powershell.md
 ├── src/
-│   ├── load_knowledge_base.py
-│   ├── simple_retriever.py
-│   ├── build_context.py
 │   ├── build_answer_prompt.py
+│   ├── build_context.py
+│   ├── generate_sample_alerts.py
+│   ├── generate_sample_prompts.py
+│   ├── load_knowledge_base.py
+│   ├── query_builder.py
 │   ├── run_demo_pipeline.py
+│   ├── simple_retriever.py
+│   ├── test_retrieval.py
+│   ├── test_sample_alerts.py
 │   └── triage_cli.py
-│
 ├── README.md
 └── .gitignore
 ```
 
 ---
 
-## How It Works
+## How to Run
 
-The project follows a simple RAG pipeline:
+### Generate sample final answers
 
-```text
-Security Alert
-      ↓
-Retrieve relevant knowledge base documents
-      ↓
-Build retrieved context
-      ↓
-Build SOC analyst answer prompt
-      ↓
-Review structured triage response
+```bash
+python src/generate_sample_final_answers.py
 ```
 
-### 1. Retrieve
-
-The retriever searches the `knowledge_base` folder and finds documents related to the alert.
-
-### 2. Build Context
-
-The selected documents are read and combined into a context file:
+This creates example final SOC Analyst Coach answers inside:
 
 ```text
-outputs/retrieved_context.txt
+outputs/sample_final_answers/
 ```
 
-### 3. Build Answer Prompt
-
-The alert and retrieved context are combined into a final SOC analyst prompt:
-
-```text
-outputs/answer_prompt.txt
-```
-
-### 4. Sample Answer
-
-A manually prepared reference answer is provided here:
-
-```text
-outputs/sample_answer_bruteforce.md
-```
-
-This file shows the expected SOC triage response format for the brute force demo.
-
----
-
-## Run Demo Pipeline
-
-From the project root folder, run:
+### Run the demo pipeline
 
 ```bash
 python src/run_demo_pipeline.py
 ```
 
-Expected terminal flow:
-
-```text
-CyberSOC Incident Triage Assistant - Demo Pipeline
-
-[1] Alert alındı
-[2] Knowledge base içinde ilgili kaynaklar aranıyor
-[3] Seçilen kaynaklar
-[4] Context oluşturuluyor
-[5] Answer prompt oluşturuluyor
-[6] Demo tamamlandı
-```
-
-After running the demo, check:
+This runs a predefined brute force demo alert and creates:
 
 ```text
 outputs/retrieved_context.txt
 outputs/answer_prompt.txt
-outputs/sample_answer_bruteforce.md
 ```
 
 ---
 
-## Run Interactive CLI
-
-You can also enter your own alert, log snippet, or incident description from the terminal.
-
-Run:
+### Run interactive triage mode
 
 ```bash
 python src/triage_cli.py
 ```
 
-Example phishing input:
+Paste an alert, log, or incident description into the terminal.
 
-```text
-A user reported a suspicious email with an urgent password reset subject.
-The email contains an unknown link.
-The user_clicked status is unknown.
-The credentials_entered status is unknown.
-```
+Press Enter on an empty line to finish.
 
-After entering the alert, press Enter on an empty line.
+The program will:
 
-The CLI will:
-
-```text
-1. Receive the alert text
-2. Retrieve relevant knowledge base documents
-3. Build retrieved context
-4. Build the SOC analyst answer prompt
-5. Save the result into outputs/answer_prompt.txt
-```
-
-Example source output:
-
-```text
-[3] İlgili bilgi kaynakları bulundu:
-
-- T1566_phishing.md
-  Yol: knowledge_base\mitre\T1566_phishing.md
-  Tür: MITRE ATT&CK tekniği özeti
-  Kaynak eşleşme skoru: 17
-
-- email_investigation_fields.md
-  Yol: knowledge_base\investigation_notes\email_investigation_fields.md
-  Tür: Investigation notes / bakılacak alanlar
-  Kaynak eşleşme skoru: 15
-```
-
-The displayed source score is not an attack probability. It is only a keyword-based source matching score between the alert text and the knowledge base documents.
+1. Build a retrieval query
+2. Search the local knowledge base
+3. Build a retrieved context
+4. Generate a SOC Analyst Coach prompt
 
 ---
 
-## Example Answer Format
+### Generate sample alerts
 
-The final SOC triage response is expected to follow this structure:
+```bash
+python src/generate_sample_alerts.py
+```
+
+This creates the 9 JSON sample alerts inside:
 
 ```text
-# Olay Özeti
-
-# Olası Yorum / Hipotez
-
-# MITRE ATT&CK Eşleşmesi
-
-# Bu Yorumu Destekleyen Kanıtlar
-
-# Eksik Bilgiler
-
-# İlk Kontrol Adımları
-
-# Önerilen İlk Müdahale
-
-# False Positive İhtimali
-
-# Kullanılan Kaynaklar
-
-# Güven Düzeyi
+knowledge_base/sample_alerts/
 ```
 
 ---
 
-## Current Limitations
+### Generate prompts for all sample alerts
 
-This is an educational prototype.
+```bash
+python src/generate_sample_prompts.py
+```
 
-Current limitations:
+This creates 9 prompt files inside:
 
-- The retriever uses simple keyword matching.
-- The source score is not an attack probability.
-- The project does not yet use embeddings or a vector database.
-- LLM response generation is not fully automated yet.
-- `sample_answer_bruteforce.md` is a manually prepared reference output.
-- No real company logs or sensitive data are used.
-- The project does not connect to SIEM, EDR, Wazuh, or a production SOC system.
-- The assistant does not perform automatic remediation.
+```text
+outputs/sample_prompts/
+```
+
+Each file contains a complete SOC Analyst Coach prompt for one sample alert.
 
 ---
 
-## Safety Notes
+## Tests
+
+### Run all project checks
+
+```bash
+python src/run_all_checks.py
+```
+
+This command runs:
+
+- retrieval tests
+- sample alert retrieval tests
+- sample prompt generation
+
+### Test basic retrieval scenarios
+
+```bash
+python src/test_retrieval.py
+```
+
+Expected result:
+
+```text
+Genel Sonuç: 3/3 test geçti.
+```
+
+---
+
+### Test all sample alerts
+
+```bash
+python src/test_sample_alerts.py
+```
+
+Expected result:
+
+```text
+Genel Sonuç: 9/9 sample alert testi geçti.
+```
+
+The tests check whether each alert category retrieves the expected knowledge base files.
+
+---
+
+## Current Test Status
+
+Latest validated results:
+
+```text
+Retrieval test suite: 3/3 passed
+Sample alert retrieval test suite: 9/9 passed
+Sample prompt generation: 9 prompts generated
+```
+
+---
+
+## Example Workflow
+
+```text
+1. Analyst enters an alert.
+2. Query builder enriches the alert text.
+3. Retriever finds relevant knowledge base files.
+4. Context builder creates a source-based context.
+5. Prompt builder creates a SOC Analyst Coach prompt.
+6. LLM can use the prompt to generate a structured triage answer.
+```
+
+---
+
+## Safety Boundaries
 
 This project is defensive and educational.
 
-It does not provide:
+The assistant does not:
 
-- Exploit code
-- Malware code
-- Credential theft instructions
-- Automatic attack execution
-- Real company incident data
+- perform exploitation
+- provide malware code
+- steal credentials
+- automatically block IP addresses
+- automatically disable accounts
+- delete files
+- kill processes
+- perform destructive remediation
 
-All sample alerts are synthetic and safe for demo purposes.
+It only provides triage guidance for a human analyst.
 
 ---
 
-## Data Sources and Attribution
+## Limitations
 
-This project uses simplified educational notes inspired by public cybersecurity knowledge sources such as:
+Current limitations:
 
-- MITRE ATT&CK concepts
-- NIST incident response concepts
-- Custom SOC playbooks written for this project
-
-MITRE ATT&CK is a knowledge base maintained by The MITRE Corporation. This project is not affiliated with or endorsed by MITRE.
+- No real SIEM integration
+- No real EDR integration
+- No live log ingestion
+- No automatic LLM call yet
+- Retrieval is keyword and category based, not embedding based
+- Scores are retrieval scores, not probability or severity scores
+- Sample alerts are synthetic educational examples
 
 ---
 
@@ -327,29 +452,46 @@ MITRE ATT&CK is a knowledge base maintained by The MITRE Corporation. This proje
 
 Planned improvements:
 
-- Add automated local LLM response generation
-- Improve the final output format into a SOC Analyst Coach style
-- Add richer brute force knowledge base content
-- Add richer phishing and PowerShell investigation content
-- Add more sample alerts with low, medium, and high risk examples
-- Improve retrieval with embeddings
-- Add better scoring and source ranking
+- Add local LLM integration
+- Add optional Foundry Local / local model workflow
+- Add richer output examples for low, medium, and high severity alerts
+- Add more SOC playbooks
+- Add more MITRE ATT&CK techniques
+- Add more sample alerts
+- Improve retrieval using embeddings
+- Add structured JSON output mode
 - Add a simple web UI
-- Add more SOC playbooks and investigation notes
+- Add exportable incident triage reports
 
 ---
 
 ## Status
 
 ```text
+Sample final answer generator: working
 Knowledge base design: done
 Brute force knowledge line: done
 Phishing knowledge line: done
 Suspicious PowerShell knowledge line: done
+NIST incident response summary: done
+Sample alerts: done
 Retriever: working
+Category-aware retrieval: working
 Context builder: working
 Answer prompt builder: working
+SOC Analyst Coach prompt format: done
 Demo pipeline: working
 Interactive CLI: working
+Retrieval tests: passing
+Sample alert tests: passing
+Sample prompt generator: working
 LLM integration: next step
 ```
+
+---
+
+## Disclaimer
+
+This project is a learning and portfolio prototype for defensive cybersecurity.
+
+It should not be used as a production SOC tool without proper validation, security review, logging, access control, and integration testing.

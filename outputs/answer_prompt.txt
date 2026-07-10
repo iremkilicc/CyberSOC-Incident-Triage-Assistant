@@ -1,146 +1,297 @@
-You are a cybersecurity SOC analyst assistant.
+You are a cybersecurity SOC analyst coach assistant.
 
-Your task is to analyze the given security alert by using ONLY the provided knowledge base context.
+Your task is to help a junior SOC analyst understand and triage the given security alert.
 
-Do not claim that the event is definitely malicious unless the context and evidence clearly support it.
-If there is not enough information, say that more evidence is needed.
+Use ONLY the provided knowledge base context.
+Do not invent facts that are not supported by the alert or the context.
+Do not claim that the event is definitely malicious unless the evidence clearly supports it.
+If there is not enough information, clearly say which evidence is missing.
 Do not recommend automatic blocking, account disabling, malware removal, or destructive actions.
 You are only giving triage guidance to a human analyst.
 
+Important:
+- Source scores in the context are retrieval matching scores, not attack probability.
+- Explain the event like you are coaching a beginner SOC analyst.
+- Prefer cautious language such as "benzeyebilir", "değerlendirilmeli", "kontrol edilmeli".
+- Mention multiple possible scenarios when appropriate.
+- Focus on what the analyst should check next.
+
 SECURITY ALERT:
-A standard user executed an encoded PowerShell command on WIN-CLIENT-01.
-The command line contains powershell.exe -EncodedCommand.
-The parent_process is unknown.
-The network_connection status is unknown.
-Severity is medium.
+çok fazla başarısız giriş var ama sonrasında giriş var ne olabilir 
 
 KNOWLEDGE BASE CONTEXT:
-
 [SOURCE 1]
-Path: knowledge_base\mitre\T1059_command_and_scripting_interpreter.md
-Score: 11
+Path: knowledge_base\playbooks\brute_force_playbook.md
+Score: 1055
 
 Content:
-# T1059 - Command and Scripting Interpreter
+# Brute Force SOC Playbook
 
-## Kısa Açıklama
+## Amaç
 
-Command and Scripting Interpreter, saldırganların sistemde komut veya script çalıştırmak için işletim sistemindeki yorumlayıcıları kullanmasıdır.
+Bu playbook, kısa sürede çok sayıda başarısız giriş denemesi, password guessing, suspicious login, VPN login anomaly ve başarısız denemelerden sonra başarılı login görülen olaylarda SOC analyst'in nasıl düşünmesi gerektiğini açıklar.
 
-Windows tarafında PowerShell, cmd gibi araçlar; Linux tarafında shell veya bash gibi araçlar bu kategoriye örnek olabilir. Bu araçlar sistem yöneticileri tarafından normal amaçlarla da kullanılır, bu yüzden tek başına komut çalıştırılması kesin saldırı anlamına gelmez.
+Brute force alerti tek başına kesin saldırı anlamına gelmez. Kullanıcı şifresini unutmuş olabilir, yanlış yapılandırılmış bir servis eski şifreyle tekrar tekrar giriş deniyor olabilir veya gerçekten bir saldırgan parola tahmini yapıyor olabilir.
 
-## Bu Teknik Ne Zaman Düşünülür?
+Bu yüzden amaç doğrudan kesin hüküm vermek değil, kanıtları toplayarak olayın riskini belirlemektir.
 
-Aşağıdaki durumlarda T1059 düşünülebilir:
+---
 
-- PowerShell, cmd veya benzer komut araçları beklenmeyen şekilde çalıştırılmışsa
-- Encoded veya gizlenmiş komut kullanılmışsa
-- Komut normal kullanıcı hesabı tarafından çalıştırılmışsa
-- Komut beklenmeyen bir parent process tarafından başlatılmışsa
-- Komut çalıştıktan sonra ağ bağlantısı veya dosya indirme davranışı görülmüşse
-- Komut bir phishing maili, şüpheli ek dosya veya bilinmeyen process sonrası çalışmışsa
-- Aynı endpoint üzerinde başka güvenlik alertleri oluşmuşsa
+## Kapsam
 
-## Tipik Kanıtlar
+Bu playbook şu olaylarda kullanılabilir:
 
-- command_line bilgisi
-- process_name
-- parent_process
-- encoded_command kullanımı
-- user bilgisi
-- endpoint_name
-- timestamp
-- network_connectio
+- Kısa sürede çok sayıda başarısız login denemesi
+- Aynı kullanıcıya tekrar tekrar parola denenmesi
+- Aynı source IP'nin birden fazla kullanıcıyı denemesi
+- Başarısız girişlerden sonra başarılı login görülmesi
+- VPN, RDP, SSH, web login veya cloud console üzerinde tekrar eden giriş denemeleri
+- Kritik kullanıcı hesabına yönelik login denemeleri
+- Mesai dışı veya olağan dışı lokasyondan login denemeleri
+- MFA başarısızlıklarıyla beraber gelen login olayları
+- Password spraying veya credential stuffing şüphesi
+
+---
+
+## Temel Kavramlar
+
+### Brute Force
+
+Brute force, saldırganın doğru parolayı bulmak için aynı kullanıcı veya sistem üzerinde çok sayıda parola denemesi yapmasıdır.
+
+Tipik özellikler:
+
+- Aynı kullanıcıya çok sayıda başarısız giriş denemesi
+- Kısa zaman aralığı
+- Aynı source IP veya benzer IP aralığı
+- Başarısız denemelerden sonra başarılı login görülebilir
+
+---
+
+### Password Guessing
+
+Password guessing, saldırganın tahmin edilebilir parolaları denemesidir.
+
+Örnekler:
+
+- Password123
+- Welcome2026
+- CompanyName2026
+- Summer2026
+- Kullanıcı adıyla benzer parola
+
+Bu olay brute force kadar yoğun olmayabilir ama yine de risklidir.
+
+---
+
+### Password Spraying
+
+Password spraying, saldırganın aynı veya az sayıda parolayı birçok kullanıcı hesabında denemesidir.
+
+Tipik özellikler:
+
+- Çok sayıda farklı kullanıcı
+- Her kullanıcıda az sayıda deneme
+- Account lockout tetiklenmesin diye yavaş yapılabilir
+- Aynı parola birçok hesapta denenmiş olabilir
+
+Riskli bir davranıştır çünkü tek bir zayıf parola tüm saldırıyı başarılı yapabilir.
+
+---
+
+### Credential Stuffing
+
+Credential stuffing, başka bir veri sızıntısından elde edilen kullanıcı adı/parola kombinasyonlarının denenmesidir.
+
+Tipik özellikler:
+
+- Birden fazla kullanıcı hesabına deneme
+- Bazı hesaplarda hızlı başarılı login
+- Denemeler farklı IP
 
 ---
 
 [SOURCE 2]
-Path: knowledge_base\investigation_notes\endpoint_investigation_fields.md
-Score: 10
+Path: knowledge_base\mitre\T1110_brute_force.md
+Score: 1054
 
 Content:
-# Endpoint Investigation Fields
+# T1110 - Brute Force
 
-## Amaç
+## Kısa Açıklama
 
-Bu dosya, endpoint yani kullanıcı cihazı veya sunucu üzerinde oluşan şüpheli olayları incelerken hangi alanlara bakılması gerektiğini açıklar.
+T1110 - Brute Force, saldırganın geçerli kullanıcı adı, parola veya kimlik doğrulama bilgisini bulmak için tekrar eden giriş denemeleri yapmasıdır.
 
-Suspicious PowerShell, malware activity, suspicious process veya command execution olaylarında bu alanlar SOC analyst için önemlidir.
+Bu davranış login sistemlerinde, VPN girişlerinde, SSH, RDP, web uygulamaları, email portalları, cloud panelleri ve diğer authentication noktalarında görülebilir.
 
-## Önemli Alanlar
+Brute force davranışı tek başına kesin hesap ele geçirilmesi anlamına gelmez. Ancak kısa sürede çok sayıda başarısız giriş denemesi, kritik hesapların hedeflenmesi ve başarısız denemelerden sonra başarılı login görülmesi ciddi risk oluşturur.
 
-### user
+---
 
-Komutu veya process’i çalıştıran kullanıcı hesabıdır.
+## SOC Açısından Neden Önemlidir?
 
-Kontrol soruları:
-- Kullanıcı normalde bu işlemi yapar mı?
-- Kullanıcı teknik veya admin yetkili biri mi?
-- Kullanıcı yakın zamanda phishing olayı yaşamış mı?
+Brute force saldırıları genellikle şu risklere yol açabilir:
 
-### command_line
+- Geçerli kullanıcı hesabının ele geçirilmesi
+- VPN veya uzak erişim sistemine yetkisiz giriş
+- Privileged account kullanım riski
+- İç ağa ilk erişim ihtimali
+- Kimlik bilgisi deneme kampanyası
+- Password spraying veya credential stuffing davranışı
+- Başarılı login sonrası lateral movement veya veri erişimi riski
 
-Çalıştırılan komutun tam satır bilgisidir.
+SOC analyst için amaç, sadece başarısız deneme sayısına bakmak değildir. Asıl amaç şunu anlamaktır:
 
-Kontrol soruları:
-- Komut açık ve anlaşılır mı?
-- Komut gizlenmiş veya encoded görünüyor mu?
-- Komut dosya indirme, script çalıştırma veya dış bağlantı içeriyor mu?
+- Denemeler normal kullanıcı hatası mı?
+- Yanlış yapılandırılmış servis mi?
+- Parola tahmin saldırısı mı?
+- Başarılı giriş gerçekten kullanıcıya mı ait?
+- Başarılı giriş sonrası şüpheli hareket var mı?
 
-### parent_process
+---
 
-Şüpheli process’i hangi process’in başlattığını gösterir.
+## Bu Teknik Ne Zaman Düşünülür?
 
-Kontrol soruları:
-- PowerShell normal terminalden mi başlatılmış?
-- Word, Excel, browser veya bilinmeyen process PowerShell başlatmış mı?
-- Parent process beklenen bir uygulama mı?
+Aşağıdaki durumlarda T1110 Brute Force düşünülebilir:
 
-### process_name
+- Kısa sürede çok sayıda başarısız giriş denemesi varsa
+- Aynı kullanıcıya tekrar tekrar parola deneniyorsa
+- Aynı source IP adresi birden fazla kullanıcı hesabını deniyorsa
+- Başarısız giriş denemelerinden sonra başarılı giriş oluşuyorsa
+- Kritik kullanıcı hesapları hedefleniyorsa
+- Admin, root, domain admin veya privileged account hedefleniyorsa
+- VPN, RDP, SSH, email portal veya web login üzerinde tekrar eden denemeler varsa
+- Mesai dışında olağan dışı login denemeleri görülüyorsa
+- MFA başarısızlıkları login denemeleriyle beraber görülüyorsa
+- Aynı parola birçok kullanıcıda denenmiş gibi görünüyorsa
+- Kullanıcı normal lokasyonundan farklı bir yerden deneniyorsa
 
-Çalışan process’in adıdır.
+---
 
-Kontrol soruları:
-- Process adı beklenen bir sistem aracı mı?
-- Process adı sahte veya yanıltıcı gör
+## İlgili Alt Davranışlar
+
+### Password Guessing
+
+Saldırganın tek veya birkaç kullanıcı hesabı üzerinde tahmin edilebilir parolaları denemesidir.
+
+SOC açısından ipuçları:
+
+- Aynı kullanıcıda çok sayıda başarısız deneme
+- Kısa zaman aralığında tekrar eden login hataları
+- Başarısız denemelerden sonra başarılı giriş
+- Kullanıcının kritik hesap olması
+- Source IP'nin bilinmeyen veya şüpheli olması
+
+---
+
+##
 
 ---
 
 [SOURCE 3]
-Path: knowledge_base\playbooks\suspicious_powershell_playbook.md
-Score: 10
+Path: knowledge_base\investigation_notes\login_log_fields.md
+Score: 1053
 
 Content:
-# Suspicious PowerShell SOC Playbook
+# Login Log Fields
 
 ## Amaç
 
-Bu playbook, Windows cihazlarda şüpheli PowerShell komutu çalıştığında SOC analyst’in hangi kontrolleri yapması gerektiğini açıklar.
+Bu dosya, login ve authentication olaylarını incelerken hangi log alanlarına bakılması gerektiğini açıklar.
 
-PowerShell tek başına zararlı değildir. Sistem yöneticileri ve teknik kullanıcılar PowerShell’i normal yönetim işleri için kullanabilir. Ancak saldırganlar da PowerShell’i komut çalıştırmak, bilgi toplamak, zararlı işlem başlatmak veya aktivitelerini gizlemek için kötüye kullanabilir.
+Brute force, password guessing, suspicious login, valid account abuse ve VPN login anomaly gibi olaylarda bu alanlar SOC analyst için önemlidir.
 
-Bu yüzden PowerShell alerti görüldüğünde hemen kesin saldırı denmemeli; komutun içeriği, kullanıcı, parent process, cihaz geçmişi ve ağ bağlantıları birlikte incelenmelidir.
+Bir login alerti tek başına kesin saldırı anlamına gelmez. SOC analyst önce kanıtları toplamalı, normal kullanıcı davranışıyla karşılaştırmalı ve eksik bilgileri belirlemelidir.
 
-## Bu Olay Ne Zaman Düşünülür?
+---
 
-Aşağıdaki durumlar şüpheli PowerShell kullanımı oluşturabilir:
+## Temel Alanlar
 
-- PowerShell normal kullanıcı hesabı tarafından çalıştırılmışsa
-- Encoded veya gizlenmiş komut kullanılmışsa
-- PowerShell beklenmeyen bir uygulama tarafından başlatılmışsa
-- Komut satırı çok uzun, karmaşık veya okunması zor görünüyorsa
-- PowerShell sonrasında dış ağ bağlantısı oluşmuşsa
-- Aynı cihazda başka güvenlik alertleri varsa
-- Kullanıcı normalde PowerShell kullanmıyorsa
-- PowerShell bir phishing maili veya şüpheli dosya açıldıktan sonra çalışmışsa
+### user
 
-#
+Giriş denemesi yapılan kullanıcı hesabıdır.
+
+Kontrol soruları:
+- Kullanıcı kritik veya yetkili bir hesap mı?
+- Kullanıcı normalde bu sisteme giriş yapar mı?
+- Kullanıcı bu saatlerde aktif olur mu?
+- Kullanıcı servis hesabı mı, insan kullanıcı mı?
+- Kullanıcı daha önce benzer login hataları yaşamış mı?
+
+Risk artıran durumlar:
+- Admin, root, domain admin, privileged user gibi yetkili hesap olması
+- Kullanıcının normalde VPN kullanmaması
+- Kullanıcının mesai dışı giriş yapması
+- Kullanıcının kısa sürede çok fazla başarısız giriş denemesi alması
+
+---
+
+### source_ip
+
+Giriş denemesinin geldiği IP adresidir.
+
+Kontrol soruları:
+- IP daha önce görülmüş mü?
+- Aynı IP başka hesapları da denemiş mi?
+- IP beklenen lokasyondan mı geliyor?
+- IP dış kaynak mı, iç ağ mı?
+- IP VPN, proxy, TOR veya hosting sağlayıcısı gibi görünüyor mu?
+- IP kurum içinde bilinen bir sistem mi?
+
+Risk artıran durumlar:
+- Aynı IP'nin birden fazla kullanıcıyı denemesi
+- IP'nin daha önce tehdit istihbaratında görülmesi
+- Kullanıcının normal lokasyonundan farklı olması
+- IP'nin kısa sürede çok sayıda login denemesi üretmesi
+
+---
+
+### destination_system
+
+Giriş denemesinin yapıldığı sistemdir.
+
+Örnekler:
+- vpn-gateway
+- firewall
+- domain controller
+- email portal
+- cloud console
+- RDP server
+- SSH server
+- web application login
+
+Kontrol soruları:
+- Sistem dış erişime açık mı?
+- Sistem kritik mi?
+- Bu sistemde başarılı login sonrası hangi kaynaklara erişilebilir?
+- Kullanıcı normalde bu sisteme giriş yapar mı?
+
+Risk artıran durumlar:
+- VPN gateway, domain controller, cloud admin panel gibi kritik sistemler
+- Dışarıdan erişilebilen sistemler
+- Başarılı giriş sonrası kurum ağına erişim sağlanabilmesi
+
+---
+
+### timestamp
+
+Olayın gerçekleştiği zamandır.
+
+Kontrol soruları:
+- Giriş denemeleri kısa zaman aralığında mı olmuş?
+- Olay mesai dışında mı gerçekleşmiş?
+- Başarısız denemeden sonra başarılı giriş ne zaman olmuş?
+- Aynı zamanda başka alertler oluşmuş mu?
+
+Risk artıran durumlar:
+- Çok kısa sürede çok sayıda deneme
+
 
 ---
 
 [SOURCE 4]
 Path: knowledge_base\nist\nist_incident_response_summary.md
-Score: 9
+Score: 642
 
 Content:
 # NIST Incident Response Summary
@@ -171,47 +322,137 @@ Bir SOC analyst güvenlik alerti gördüğünde aşağıdaki sorularla düşünm
 6. Olayın riski düşük mü, orta mı, yüksek mi?
 7. İlk kontrol adımları neler olmalı?
 8. Kontrol altına alma veya müdahale gerekli mi?
-9. Olay
+9. Olay sonrasında hangi dersler çıkarılabilir?
+
+## 1. Olayı Tanımla
+
+İlk adım, alertin ne anlattığını sade şekilde anlamaktır.
+
+Örnekler:
+
+- Çok sayıda başarısız login denemesi görüldü.
+- Kullanıcı şüpheli bir e-posta bildirdi.
+- Endpoint üzerinde encoded PowerShell komutu çalıştı.
+
+Bu aşamada amaç hemen karar vermek değildir. Amaç olayın neye benzediğini anlamaktır.
+
+## 2. Etkilenen Kullanıcı ve Sistemleri Belirle
+
+Olay hangi kullanıcıyı, cihazı veya sistemi etkiliyor?
+
+Bakılabilecek alanlar:
+
+- user
+- source_ip
+- endpoint_name
+- target_system
+- recipient
+- sender
+- timestamp
+- affected_host
+
+Örnek:
+
+Brute force olayında hedef kullanıcı `admin` ise risk artabilir.
+
+Phishing olayında kullanıcı linke tıkladıysa risk artabilir.
+
+PowerShell olayında endpoint kritik bir sunucuysa risk artabilir.
+
+## 3. Kanıtları Topla ve Koru
+
+Karar vermeden önce kanıtlar toplanmalıdır.
+
+Kanıt örnekleri:
+
+- login logs
+- email headers
+- command_line bilgisi
+- parent_process bilgisi
+- network connection bilgisi
+- related_alerts
+- kullanıcı beyanı
+- güvenlik aracı uyarıları
+
+Kanıtlar eksikse asistan kesin konuşmamalıdır.
+
+Doğru ifade:
+
+"Kaynaklarda bu olayı kesin saldırı olarak değerlendirmek için yeterli bilgi yok."
+
+Yanlış ifade:
+
+"Bu kesin saldırıdır."
+
+## 4. Olayın Ciddiyetini Değerlendir
+
+Olayın risk sev
 
 
-Now produce the answer in Turkish using this exact format:
+Now produce the answer in Turkish using this exact SOC Analyst Coach format:
 
-# Olay Özeti
+# 1. Olayı İnsan Dilinde Açıklama
 
-Kısa ve sade şekilde olayın ne olduğunu açıkla.
+Bu alertin ne anlattığını teknik olmayan, sade bir dille açıkla.
 
-# Olası Yorum / Hipotez
+# 2. İlk İzlenim
 
-Bu olayın neye benzeyebileceğini açıkla. Kesin konuşma.
+Bu olay ilk bakışta neye benziyor? Kesin konuşmadan yorumla.
 
-# MITRE ATT&CK Eşleşmesi
+# 3. Olası Senaryolar
 
-İlgili MITRE tekniğini yaz. Emin değilsen olası eşleşme olarak belirt.
+Bu olayın birkaç farklı açıklamasını yaz.
 
-# Bu Yorumu Destekleyen Kanıtlar
+Örnek yaklaşım:
+- Saldırı ihtimali
+- Geçerli hesap kullanımı ihtimali
+- Kullanıcı hatası / yanlış yapılandırma / false positive ihtimali
 
-Alert içindeki kanıtları madde madde yaz.
+# 4. MITRE ATT&CK Eşleşmesi
 
-# Eksik Bilgiler
+İlgili MITRE tekniğini veya tekniklerini yaz.
+Emin değilsen "olası eşleşme" olarak belirt.
 
-Kesin karar için hangi bilgilerin eksik olduğunu yaz.
+# 5. Bu Yorumu Destekleyen Kanıtlar
 
-# İlk Kontrol Adımları
+Alert içindeki somut kanıtları madde madde yaz.
 
-SOC analyst’in ilk bakması gereken adımları yaz.
+# 6. Risk Artıran Durumlar
 
-# Önerilen İlk Müdahale
+Bu olayda riski artıran noktaları yaz.
 
-Temkinli ve güvenli öneriler ver. Otomatik engelleme veya hesap kapatma önerme.
+# 7. Risk Düşüren veya False Positive Olabilecek Durumlar
 
-# False Positive İhtimali
+Bu olayın saldırı dışı nedenlerini açıkla.
 
-Bu olayın saldırı dışı açıklamalarını yaz.
+# 8. Eksik Bilgiler
 
-# Kullanılan Kaynaklar
+Kesin karar vermek için hangi bilgiler eksik, madde madde yaz.
+
+# 9. SOC Analyst İçin Adım Adım Kontrol Planı
+
+Junior SOC analyst'in sırayla neye bakması gerektiğini adım adım yaz.
+Adımlar pratik ve uygulanabilir olsun.
+
+# 10. Ne Zaman Incident'a Yükseltilir?
+
+Bu olay hangi şartlarda gerçek incident olarak yükseltilmeli, açıkla.
+
+# 11. Önerilen İlk Müdahale
+
+Temkinli ve güvenli öneriler ver.
+Otomatik engelleme, hesap kapatma veya silme gibi aksiyonlar önerme.
+
+# 12. Kullanılan Kaynaklar
 
 Context içinde verilen kaynak dosya adlarını yaz.
 
-# Güven Düzeyi
+# 13. Güven Düzeyi
 
-Düşük, orta veya yüksek şeklinde belirt. Nedenini kısa açıkla.
+Düşük, orta veya yüksek şeklinde belirt.
+Nedenini kısa ve kanıta dayalı açıkla.
+
+LANGUAGE INSTRUCTION:
+The user's input appears to be Turkish.
+Produce the final SOC Analyst Coach answer in Turkish.
+Keep technical terms such as MITRE ATT&CK, brute force, phishing, PowerShell, IOC, MFA, SIEM, EDR, and incident response in common technical form when appropriate.

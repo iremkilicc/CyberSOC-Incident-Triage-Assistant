@@ -1,0 +1,26 @@
+{
+  "alert_id": "BF-MED-001",
+  "category": "brute_force",
+  "risk_level": "medium",
+  "title": "Multiple failed login attempts followed by successful VPN login",
+  "description": "Multiple failed login attempts were detected for the admin user on the VPN gateway. After the failed attempts, a successful login was observed.",
+  "user": "admin",
+  "account_type": "privileged_user",
+  "destination_system": "vpn-gateway",
+  "source_ip": "192.168.1.25",
+  "source_ip_type": "internal_or_unknown",
+  "failed_attempt_count": 35,
+  "time_window_minutes": 5,
+  "success_after_failures": true,
+  "login_status": "success_after_failures",
+  "mfa_status": "unknown",
+  "geo_location": "unknown",
+  "user_agent": "unknown",
+  "business_hours": true,
+  "notes": [
+    "Privileged account targeted",
+    "High number of failed attempts in short time",
+    "Successful login after failures",
+    "MFA and post-login activity are unknown"
+  ]
+}

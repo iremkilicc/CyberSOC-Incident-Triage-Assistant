@@ -1,0 +1,28 @@
+{
+  "alert_id": "PH-LOW-001",
+  "category": "phishing",
+  "risk_level": "low",
+  "title": "User-reported suspicious email blocked by mail gateway",
+  "description": "A user reported a suspicious email. The email was quarantined by the mail gateway and was not delivered to the inbox.",
+  "sender_email": "newsletter@example.com",
+  "sender_display_name": "Newsletter Service",
+  "recipient": "employee02@company.local",
+  "subject": "Monthly product update",
+  "delivery_status": "quarantined",
+  "spf_result": "pass",
+  "dkim_result": "pass",
+  "dmarc_result": "pass",
+  "url_present": true,
+  "url": "https://example.com/newsletter",
+  "attachment_present": false,
+  "user_clicked": false,
+  "credentials_entered": false,
+  "attachment_opened": false,
+  "same_email_seen_in_other_mailboxes": false,
+  "notes": [
+    "Email was quarantined",
+    "No user click observed",
+    "No credentials entered",
+    "Authentication results passed"
+  ]
+}
