@@ -16,5 +16,14 @@ Thumbs.db
 # Editor files
 .vscode/
 
-# Optional generated outputs
-# outputs/
+# Generated runtime files
+outputs/
+
+# Local databases
+data/*.db
+data/*.sqlite
+data/*.sqlite3
+
+# Local AI model files
+*.onnx
+*.gguf
