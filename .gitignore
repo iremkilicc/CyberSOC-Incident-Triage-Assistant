@@ -1,0 +1,46 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environments
+venv/
+.venv/
+.venv-*/
+
+# Environment variables
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+
+# Generated runtime files
+outputs/
+
+# Local databases
+data/*.db
+data/*.sqlite
+data/*.sqlite3
+!data/knowledge_index.db
+
+# Local AI model files
+*.onnx
+*.gguf
+
+# Local archives and runtime logs
+*.zip
+*.log
+.foundry_local/
+.venv-qml/
+.pytest_cache/
+logs/
+coverage.xml
+htmlcov/
+
+# Local audit/quarantine folders (never source or release content)
+quarantine/
+private_quarantine/
+*_quarantine/

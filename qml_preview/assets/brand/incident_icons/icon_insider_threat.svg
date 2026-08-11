@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 64 64">
+  <title>icon_insider_threat</title>
+  <path d="M32 4 L56 18 L56 46 L32 60 L8 46 L8 18 Z" fill="none" stroke="#FF4D5A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 33 24 A 6 6 0 1 0 21 24 A 6 6 0 1 0 33 24" fill="none" stroke="#FF4D5A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M16 45 C17 35 37 35 38 45" fill="none" stroke="#FF4D5A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M44 20 V31" fill="none" stroke="#FF4D5A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 45.5 37 A 1.5 1.5 0 1 0 42.5 37 A 1.5 1.5 0 1 0 45.5 37" fill="#FF4D5A" stroke="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M39 17 L44 13 L49 17" fill="none" stroke="#FF4D5A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

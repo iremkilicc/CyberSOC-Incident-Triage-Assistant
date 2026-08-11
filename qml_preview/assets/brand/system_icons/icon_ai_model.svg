@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 64 64">
+  <title>icon_ai_model</title>
+  <path d="M32 4 L56 18 L56 46 L32 60 L8 46 L8 18 Z" fill="none" stroke="#20D7FF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M32 18 C27 14 22 17 22 22 C17 23 16 30 20 33 C17 37 20 43 25 42 C27 47 33 47 35 43 C40 46 46 42 44 37 C49 34 47 27 43 26 C44 20 38 17 34 20" fill="none" stroke="#20D7FF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M32 18 V46 M24 25 H29 M35 25 H42 M24 33 H29 M35 33 H43 M25 40 H29 M35 40 H40" fill="none" stroke="#20D7FF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

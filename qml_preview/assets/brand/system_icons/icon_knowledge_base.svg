@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 64 64">
+  <title>icon_knowledge_base</title>
+  <path d="M32 4 L56 18 L56 46 L32 60 L8 46 L8 18 Z" fill="none" stroke="#69E27D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M18 21 C18 16 46 16 46 21 C46 26 18 26 18 21 Z" fill="none" stroke="#69E27D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M18 21 V42 C18 47 46 47 46 42 V21" fill="none" stroke="#69E27D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M18 28 C18 33 46 33 46 28" fill="none" stroke="#69E27D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M18 35 C18 40 46 40 46 35" fill="none" stroke="#69E27D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M18 42 C18 47 46 47 46 42" fill="none" stroke="#69E27D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

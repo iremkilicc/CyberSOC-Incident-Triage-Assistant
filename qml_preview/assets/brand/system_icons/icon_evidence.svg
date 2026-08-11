@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 64 64">
+  <title>icon_evidence</title>
+  <path d="M32 4 L56 18 L56 46 L32 60 L8 46 L8 18 Z" fill="none" stroke="#168BFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M19 15 H38 L46 23 V47 H19 Z" fill="none" stroke="#168BFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M38 15 V23 H46" fill="none" stroke="#168BFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M24 29 H38 M24 34 H34 M24 39 H31" fill="none" stroke="#168BFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 48 42 A 6 6 0 1 0 36 42 A 6 6 0 1 0 48 42" fill="none" stroke="#168BFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M46 46 L51 51" fill="none" stroke="#168BFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

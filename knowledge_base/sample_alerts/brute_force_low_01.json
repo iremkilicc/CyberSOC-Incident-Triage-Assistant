@@ -1,0 +1,26 @@
+{
+  "alert_id": "BF-LOW-001",
+  "category": "brute_force",
+  "risk_level": "low",
+  "title": "Small number of failed VPN login attempts",
+  "description": "A user had a small number of failed VPN login attempts and no successful login after the failures.",
+  "user": "employee01",
+  "account_type": "standard_user",
+  "destination_system": "vpn-gateway",
+  "source_ip": "10.10.5.24",
+  "source_ip_type": "internal",
+  "failed_attempt_count": 4,
+  "time_window_minutes": 10,
+  "success_after_failures": false,
+  "login_status": "failed",
+  "mfa_status": "not_triggered",
+  "geo_location": "expected_location",
+  "user_agent": "known_device",
+  "business_hours": true,
+  "notes": [
+    "Low number of failed attempts",
+    "No successful login after failures",
+    "Internal source IP",
+    "Could be normal user password mistake"
+  ]
+}

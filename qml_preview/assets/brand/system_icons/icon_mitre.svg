@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 64 64">
+  <title>icon_mitre</title>
+  <path d="M32 4 L56 18 L56 46 L32 60 L8 46 L8 18 Z" fill="none" stroke="#168BFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M32 15 L46 20 V31 C46 40 40 46 32 50 C24 46 18 40 18 31 V20 Z" fill="none" stroke="#168BFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M23 25 H41 M23 31 H41 M23 37 H41" fill="none" stroke="#168BFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M27 22 V40 M32 22 V40 M37 22 V40" fill="none" stroke="#168BFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

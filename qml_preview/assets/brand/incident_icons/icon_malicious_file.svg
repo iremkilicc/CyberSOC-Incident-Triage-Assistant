@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 64 64">
+  <title>icon_malicious_file</title>
+  <path d="M32 4 L56 18 L56 46 L32 60 L8 46 L8 18 Z" fill="none" stroke="#FF4D5A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M20 14 H36 L45 23 V49 H20 Z" fill="none" stroke="#FF4D5A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M36 14 V23 H45" fill="none" stroke="#FF4D5A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 39.5 35 A 7 7 0 1 0 25.5 35 A 7 7 0 1 0 39.5 35" fill="none" stroke="#FF4D5A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M29 33 H29.1 M36 33 H36.1 M30 39 C32 37 34 37 36 39" fill="none" stroke="#FF4D5A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

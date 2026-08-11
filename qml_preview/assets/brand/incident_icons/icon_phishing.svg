@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 64 64">
+  <title>icon_phishing</title>
+  <path d="M32 4 L56 18 L56 46 L32 60 L8 46 L8 18 Z" fill="none" stroke="#B86CFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 20 23 H 44 Q 47 23 47 26 V 40 Q 47 43 44 43 H 20 Q 17 43 17 40 V 26 Q 17 23 20 23 Z" fill="none" stroke="#B86CFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M18.5 25 L32 35 L45.5 25" fill="none" stroke="#B86CFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M32 18 C32 14 38 14 38 18 C38 21 34 21 34 25" fill="none" stroke="#B86CFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M34 25 C34 30 40 30 42 27" fill="none" stroke="#B86CFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M43 40 L48 45 M48 40 L43 45" fill="none" stroke="#FFC846" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

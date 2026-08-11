@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 64 64">
+  <title>CyberSOC symbol</title>
+  
+  <path d="M32 4 C25 10 17 14 10 17 V31 C10 45 17 54 32 60 C47 54 54 45 54 31 V17 C47 14 39 10 32 4 Z" fill="none" stroke="#20D7FF" stroke-width="2.8"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 43.5 31 A 14.5 14.5 0 1 0 14.5 31 A 14.5 14.5 0 1 0 43.5 31" fill="none" stroke="#168BFF" stroke-width="2.8"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M39.5 41.5 L52 54" fill="none" stroke="#168BFF" stroke-width="5"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M21 24 L25.5 28.5 L21 33" fill="none" stroke="#20D7FF" stroke-width="2.8"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M29 33 H35" fill="none" stroke="#20D7FF" stroke-width="2.8"
+        stroke-linecap="round"/>
+  <path d="M19.5 38 H36.5 M19.5 42.5 H32.5" fill="none" stroke="#EAF4FF" stroke-width="2.3"
+        stroke-linecap="round"/>
+
+</svg>

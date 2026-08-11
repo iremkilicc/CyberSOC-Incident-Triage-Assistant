@@ -1,0 +1,30 @@
+{
+  "alert_id": "PH-MED-001",
+  "category": "phishing",
+  "risk_level": "medium",
+  "title": "Suspicious password reset email with unknown link",
+  "description": "A user reported a suspicious email with an urgent password reset subject. The email contains an unknown link. User click and credential entry status are unknown.",
+  "sender_email": "security-alert@example-support.com",
+  "sender_display_name": "IT Security Team",
+  "reply_to": "helpdesk-reset@example-mail.com",
+  "recipient": "employee03@company.local",
+  "subject": "Urgent Password Reset Required",
+  "delivery_status": "delivered",
+  "spf_result": "softfail",
+  "dkim_result": "none",
+  "dmarc_result": "fail",
+  "url_present": true,
+  "url": "https://example-support.com/reset",
+  "visible_link_text": "Reset Password",
+  "attachment_present": false,
+  "user_clicked": "unknown",
+  "credentials_entered": "unknown",
+  "attachment_opened": false,
+  "same_email_seen_in_other_mailboxes": "unknown",
+  "notes": [
+    "Urgent password reset theme",
+    "Unknown link",
+    "DMARC failed",
+    "User interaction status unknown"
+  ]
+}

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 64 64">
+  <title>icon_sources</title>
+  <path d="M32 4 L56 18 L56 46 L32 60 L8 46 L8 18 Z" fill="none" stroke="#20D7FF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M17 20 C17 16 39 16 39 20 C39 24 17 24 17 20 Z" fill="none" stroke="#20D7FF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M17 20 V37 C17 41 39 41 39 37 V20" fill="none" stroke="#20D7FF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M17 28 C17 32 39 32 39 28" fill="none" stroke="#20D7FF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M17 36 C17 40 39 40 39 36" fill="none" stroke="#20D7FF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M41 28 H47 C50 28 50 34 47 34 H43 M41 42 H35 C32 42 32 36 35 36 H39" fill="none" stroke="#20D7FF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

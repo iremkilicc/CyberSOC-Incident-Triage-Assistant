@@ -1,0 +1,28 @@
+{
+  "alert_id": "PS-LOW-001",
+  "category": "suspicious_powershell",
+  "risk_level": "low",
+  "title": "PowerShell execution by known IT management agent",
+  "description": "PowerShell was executed by a known software deployment tool during business hours. No suspicious network connection or child process was observed.",
+  "hostname": "WIN-CLIENT-07",
+  "user": "system",
+  "user_type": "service_account",
+  "process_name": "powershell.exe",
+  "command_line": "powershell.exe -File C:\\ProgramData\\CompanyAgent\\inventory.ps1",
+  "parent_process": "company_management_agent.exe",
+  "encoded_command_present": false,
+  "network_connection": false,
+  "destination_ip": null,
+  "destination_domain": null,
+  "file_created": false,
+  "registry_change": false,
+  "scheduled_task_created": false,
+  "edr_alert": "informational",
+  "business_hours": true,
+  "notes": [
+    "Known management agent parent process",
+    "No encoded command",
+    "No suspicious network connection",
+    "No suspicious child process"
+  ]
+}

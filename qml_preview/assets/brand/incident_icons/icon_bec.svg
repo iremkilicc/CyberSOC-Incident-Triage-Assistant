@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 64 64">
+  <title>icon_bec</title>
+  <path d="M32 4 L56 18 L56 46 L32 60 L8 46 L8 18 Z" fill="none" stroke="#B86CFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 31 24 A 6 6 0 1 0 19 24 A 6 6 0 1 0 31 24" fill="none" stroke="#B86CFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M15 44 C16 34 34 34 35 44" fill="none" stroke="#B86CFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 33.5 29 H 47.5 Q 50 29 50 31.5 V 40.5 Q 50 43 47.5 43 H 33.5 Q 31 43 31 40.5 V 31.5 Q 31 29 33.5 29 Z" fill="none" stroke="#B86CFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M32.5 31 L40.5 37 L48.5 31" fill="none" stroke="#B86CFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

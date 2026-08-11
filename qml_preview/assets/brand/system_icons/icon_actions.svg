@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 64 64">
+  <title>icon_actions</title>
+  <path d="M32 4 L56 18 L56 46 L32 60 L8 46 L8 18 Z" fill="none" stroke="#FF9A3D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 21 16 H 44 Q 47 16 47 19 V 46 Q 47 49 44 49 H 21 Q 18 49 18 46 V 19 Q 18 16 21 16 Z" fill="none" stroke="#FF9A3D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 28 13 H 37 Q 39 13 39 15 V 17 Q 39 19 37 19 H 28 Q 26 19 26 17 V 15 Q 26 13 28 13 Z" fill="none" stroke="#FF9A3D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M23 27 L26 30 L31 24 M34 27 H42" fill="none" stroke="#FF9A3D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M23 36 L26 39 L31 33 M34 36 H42" fill="none" stroke="#FF9A3D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M23 45 L26 48 L31 42 M34 45 H42" fill="none" stroke="#FF9A3D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

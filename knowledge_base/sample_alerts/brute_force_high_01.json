@@ -1,0 +1,32 @@
+{
+  "alert_id": "BF-HIGH-001",
+  "category": "brute_force",
+  "risk_level": "high",
+  "title": "Privileged VPN login after repeated failures from unusual external IP",
+  "description": "A privileged account had repeated failed VPN login attempts from an unusual external IP. A successful login followed, and suspicious post-login activity was observed.",
+  "user": "domain_admin01",
+  "account_type": "privileged_user",
+  "destination_system": "vpn-gateway",
+  "source_ip": "203.0.113.45",
+  "source_ip_type": "external",
+  "failed_attempt_count": 68,
+  "time_window_minutes": 7,
+  "success_after_failures": true,
+  "login_status": "success_after_failures",
+  "mfa_status": "mfa_push_accepted_unconfirmed",
+  "geo_location": "unusual_location",
+  "user_agent": "new_device",
+  "business_hours": false,
+  "post_login_activity": [
+    "internal_rdp_connection",
+    "privileged_resource_access",
+    "security_group_query"
+  ],
+  "notes": [
+    "Privileged account targeted",
+    "External unusual source IP",
+    "Successful login after repeated failures",
+    "MFA approval not yet confirmed by user",
+    "Suspicious post-login activity observed"
+  ]
+}
